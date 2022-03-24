@@ -1,0 +1,41 @@
+version: "3.8"
+
+networks:
+  network-lea-record-shop:
+    driver: bridge
+
+services:
+  postgresql-db:
+    image: postgres:14.2
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-learecordshop}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-learecordshop}
+    ports:
+      - '5432:5432'
+    volumes: 
+      # - ./db/data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks:
+      - network-lea-record-shop
+
+  api-lea-record-shop:
+    build: ./api
+    image: api-lea-record-shop
+    restart: always
+    networks:
+      - network-lea-record-shop
+    depends_on:
+      - postgresql-db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin}
+  
