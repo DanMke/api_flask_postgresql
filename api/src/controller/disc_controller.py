@@ -27,9 +27,14 @@ class DiscController:
         def create_disc():
             if not request.json:
                 return jsonify({'message': 'No data provided'}), 400
-            elif 'artist' not in request.json or 'disc_name' not in request.json or 'release_year' not in request.json or 'music_style' not in request.json or 'unitary_value' not in request.json or 'available_quantity' not in request.json:
-                return jsonify({'message': 'Name, Artist, Release Year, Music Style, Unitary Value and Available Quantity are required'}), 400
-            elif not request.json['disc_name'] or not request.json['artist'] or not request.json['release_year'] or not request.json['music_style'] or not request.json['unitary_value']or not request.json['available_quantity']:
+            elif (
+                'artist' not in request.json or 'disc_name' not in request.json or 
+                'release_year' not in request.json or 'music_style' not in request.json or 
+                'unitary_value' not in request.json or 'available_quantity' not in request.json or 
+                not request.json['disc_name'] or not request.json['artist'] or 
+                not request.json['release_year'] or not request.json['music_style'] or 
+                not request.json['unitary_value']or not request.json['available_quantity']
+            ):
                 return jsonify({'message': 'Name, Artist, Release Year, Music Style, Unitary Value and Available Quantity are required'}), 400
             
             if self.disc_service.get_disc_by_artist_and_name(request.json['artist'], request.json['disc_name']):
