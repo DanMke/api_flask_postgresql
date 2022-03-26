@@ -31,10 +31,10 @@ class CustomerService:
 
     def create_customer(self, customer):
         query = "INSERT INTO customer (email, fullName, phone, cpf, birthDate, active) VALUES ('{}', '{}', '{}', '{}', '{}', true)".format(
-            customer.email, customer.full_name, customer.phone, customer.cpf, customer.birth_date)
+            customer.email, customer.fullName, customer.phone, customer.cpf, customer.birthDate)
         if customer.cpf is None:
             query = "INSERT INTO customer (email, fullName, phone, birthDate, active) VALUES ('{}', '{}', '{}', '{}', true)".format(
-                customer.email, customer.full_name, customer.phone, customer.birth_date)
+                customer.email, customer.fullName, customer.phone, customer.birthDate)
         self.database.query(query)
         self.database.commit()
         return json.dumps(customer.__dict__)

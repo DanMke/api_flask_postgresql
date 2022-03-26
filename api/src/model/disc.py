@@ -1,11 +1,11 @@
 class Disc:
-    def __init__(self, disc_name, artist, release_year, music_style, unitary_value, available_quantity):
-        self.disc_name = disc_name
+    def __init__(self, discName, artist, releaseYear, musicStyle, unitaryValue, availableQuantity):
+        self.discName = discName
         self.artist = artist
-        self.release_year = release_year
-        self.music_style = music_style
-        self.unitary_value = unitary_value
-        self.available_quantity = available_quantity
+        self.releaseYear = releaseYear
+        self.musicStyle = musicStyle
+        self.unitaryValue = unitaryValue
+        self.availableQuantity = availableQuantity
 
     def __repr__(self):
-        return "<Disc {}>".format(self.disc_name)
+        return "<Disc {}>".format(self.discName)

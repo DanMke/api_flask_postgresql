@@ -28,18 +28,18 @@ class CustomerController:
             if not request.json:
                 return jsonify({'message': 'No data provided'}), 400
             elif (
-                'email' not in request.json or 'full_name' not in request.json or 
-                'phone' not in request.json or 'birth_date' not in request.json or 
-                not request.json['email'] or not request.json['full_name'] or 
-                not request.json['phone'] or not request.json['birth_date']
+                'email' not in request.json or 'fullName' not in request.json or 
+                'phone' not in request.json or 'birthDate' not in request.json or 
+                not request.json['email'] or not request.json['fullName'] or 
+                not request.json['phone'] or not request.json['birthDate']
             ):
                 return jsonify({'message': 'Email, Full Name, Phone and Birth Date are required'}), 400
 
             if self.customer_service.get_customer_by_email(request.json['email']):
                 return jsonify({'message': 'Customer already exists'}), 409
 
-            customer = Customer(request.json['email'], request.json['full_name'],
-                                request.json['phone'], request.json['cpf'], request.json['birth_date'], True)
+            customer = Customer(request.json['email'], request.json['fullName'],
+                                request.json['phone'], request.json['cpf'], request.json['birthDate'], True)
             customer_json = self.customer_service.create_customer(customer)
             return customer_json, 201
 
