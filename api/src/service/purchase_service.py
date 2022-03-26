@@ -5,10 +5,41 @@ class PurchaseService:
         self.database = database
         self.customer_service = CustomerService(database)
 
-    def get_purchases(self):
+    def get_purchases(self, args_dict):
         query = "SELECT purchaseId, purchaseDateTime, totalValue, email, effective FROM purchase"
+
+        possible_keys = ['startDateTime', 'endDateTime', 'email']
+        args_dict = {k: v for k, v in args_dict.items() if k in possible_keys}
+        if len(args_dict) > 0:
+            query += " WHERE "
+            for key, value in args_dict.items():
+                if key == 'startDateTime':
+                    query += "purchaseDateTime >= '{}' AND ".format(value)
+                elif key == 'endDateTime':
+                    query += "purchaseDateTime <= '{}' AND ".format(value)
+                elif key == 'email':
+                    query += "email = '{}' AND ".format(value)
+            query = query[:-4]
+
         self.database.query(query)
-        return self.database.cur.fetchall()
+        rows = self.database.cur.fetchall()
+        purchases = []
+        for row in rows:
+            purchase = Purchase(row[1].isoformat(), row[2], row[3], row[4])
+            purchase.purchaseId = row[0]
+            query = "SELECT purchaseId, discname, artist, quantity FROM has WHERE purchaseId = '{}'".format(purchase.purchaseId)
+            self.database.query(query)
+            discs = []
+            rows_has = self.database.cur.fetchall()
+            for row_has in rows_has:
+                discs.append({
+                    'discName': row_has[1],
+                    'artist': row_has[2],
+                    'quantity': row_has[3]
+                })
+            purchase.discs = discs
+            purchases.append(purchase)
+        return purchases
 
     def get_purchase_by_id(self, purchaseId):
         query = "SELECT purchaseId, purchaseDateTime, totalValue, email, effective FROM purchase WHERE purchaseId = '{}'".format(purchaseId)
