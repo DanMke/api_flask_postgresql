@@ -1,6 +1,4 @@
-import json
 from model.customer import Customer
-
 
 class CustomerService:
     def __init__(self, database):
@@ -14,7 +12,7 @@ class CustomerService:
             return None
         customer = Customer(row[0], row[1], row[2],
                             row[3], row[4].isoformat(), row[5])
-        return json.dumps(customer.__dict__)
+        return customer
 
     def get_customers(self):
         query = "SELECT * FROM customer"
@@ -27,7 +25,7 @@ class CustomerService:
             customer = Customer(row[0], row[1], row[2],
                                 row[3], row[4].isoformat(), row[5])
             customers.append(customer)
-        return json.dumps([ob.__dict__ for ob in customers])
+        return customers
 
     def create_customer(self, customer):
         query = "INSERT INTO customer (email, fullName, phone, cpf, birthDate, active) VALUES ('{}', '{}', '{}', '{}', '{}', true)".format(
@@ -37,10 +35,19 @@ class CustomerService:
                 customer.email, customer.fullName, customer.phone, customer.birthDate)
         self.database.query(query)
         self.database.commit()
-        return json.dumps(customer.__dict__)
+        return customer
 
     def inactivate_customer(self, customer_email):
         query = "UPDATE customer SET active = false WHERE email = '{}'".format(
+            customer_email)
+        self.database.query(query)
+        self.database.commit()
+        if self.database.cur.rowcount == 0:
+            return None
+        return self.get_customer_by_email(customer_email)
+
+    def activate_customer(self, customer_email):
+        query = "UPDATE customer SET active = true WHERE email = '{}'".format(
             customer_email)
         self.database.query(query)
         self.database.commit()

@@ -1,4 +1,5 @@
-from flask import jsonify, request, json
+from flask import jsonify, request
+import json
 from model.customer import Customer
 from service.customer_service import CustomerService
 class CustomerController:
@@ -13,7 +14,7 @@ class CustomerController:
             customers = self.customer_service.get_customers()
             if customers is None:
                 return [], 200
-            return customers, 200
+            return json.dumps([ob.__dict__ for ob in customers]), 200
 
         @self.app.route('/customers/<customer_email>', methods=['GET'])
         def get_customer(customer_email):
@@ -21,7 +22,7 @@ class CustomerController:
                 customer_email)
             if customer is None:
                 return jsonify({'message': 'Customer not found'}), 404
-            return customer, 200
+            return json.dumps(customer.__dict__), 200
 
         @self.app.route('/customers', methods=['POST'])
         def create_customer():
@@ -34,14 +35,18 @@ class CustomerController:
                 not request.json['phone'] or not request.json['birthDate']
             ):
                 return jsonify({'message': 'Email, Full Name, Phone and Birth Date are required'}), 400
-
-            if self.customer_service.get_customer_by_email(request.json['email']):
-                return jsonify({'message': 'Customer already exists'}), 409
+            customer = self.customer_service.get_customer_by_email(request.json['email'])
+            if customer:
+                if not customer.active:
+                    customer = self.customer_service.activate_customer(request.json['email'])
+                    return json.dumps(customer.__dict__), 201
+                else:
+                    return jsonify({'message': 'Customer already exists'}), 409
 
             customer = Customer(request.json['email'], request.json['fullName'],
                                 request.json['phone'], request.json['cpf'], request.json['birthDate'], True)
-            customer_json = self.customer_service.create_customer(customer)
-            return customer_json, 201
+            customer = self.customer_service.create_customer(customer)
+            return json.dumps(customer.__dict__), 201
 
         @self.app.route('/customers/<customer_email>', methods=['PUT'])
         def inactivate_customer(customer_email):
@@ -49,4 +54,4 @@ class CustomerController:
                 customer_email)
             if customer is None:
                 return jsonify({'message': 'Customer not found'}), 404
-            return customer, 200
+            return json.dumps(customer.__dict__), 200
