@@ -1,5 +1,5 @@
 class Disc:
-    def __init__(self, discName, artist, releaseYear, musicStyle, unitaryValue, availableQuantity):
+    def __init__(self, discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue):
         self.discName = discName
         self.artist = artist
         self.releaseYear = releaseYear

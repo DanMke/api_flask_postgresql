@@ -5,7 +5,7 @@ class CustomerService:
         self.database = database
 
     def get_customer_by_email(self, email):
-        query = "SELECT * FROM customer WHERE email = '{}'".format(email)
+        query = "SELECT email, fullName, phone, cpf, birthDate, active FROM customer WHERE email = '{}'".format(email)
         self.database.query(query)
         row = self.database.cur.fetchone()
         if row is None:
@@ -15,7 +15,7 @@ class CustomerService:
         return customer
 
     def get_customers(self):
-        query = "SELECT * FROM customer"
+        query = "SELECT email, fullName, phone, cpf, birthDate, active FROM customer"
         self.database.query(query)
         rows = self.database.cur.fetchall()
         if rows is None:

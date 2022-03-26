@@ -52,10 +52,3 @@ class DiscController:
             disc = Disc(request.json['discName'], request.json['artist'], request.json['releaseYear'], request.json['musicStyle'], request.json['unitaryValue'], request.json['availableQuantity'])
             self.disc_service.create_disc(disc)
             return json.dumps(disc.__dict__), 201
-
-        @self.app.route('/discs/<disc_artist>/<discName>', methods=['PUT'])
-        def decrement_disc_quantity(disc_artist, discName):
-            disc = self.disc_service.update_disc_decrement_quantity(disc_artist, discName)
-            if disc is None:
-                return jsonify({'message': 'Disc not found'}), 404
-            return json.dumps(disc.__dict__), 200

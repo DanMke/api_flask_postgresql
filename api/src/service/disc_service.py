@@ -4,7 +4,7 @@ class DiscService:
         self.database = database
 
     def get_discs(self, args_dict):
-        query = "SELECT * FROM disc"
+        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc"
         possible_keys = ['artist', 'discName', 'releaseYear', 'musicStyle']
         args_dict = {k: v for k, v in args_dict.items() if k in possible_keys}
         if len(args_dict) > 0:
@@ -23,7 +23,7 @@ class DiscService:
         return discs
 
     def get_discs_by_artist(self, artist):
-        query = "SELECT * FROM disc WHERE artist = '{}'".format(artist)
+        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc WHERE artist = '{}'".format(artist)
         self.database.query(query)
         rows = self.database.cur.fetchall()
         if rows is None:
@@ -35,7 +35,7 @@ class DiscService:
         return discs
 
     def get_disc_by_artist_and_name(self, artist, discName):
-        query = "SELECT * FROM disc WHERE artist = '{}' AND discName = '{}'".format(
+        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc WHERE artist = '{}' AND discName = '{}'".format(
             artist, discName)
         self.database.query(query)
         row = self.database.cur.fetchone()
@@ -49,11 +49,11 @@ class DiscService:
             disc.discName, disc.artist, disc.releaseYear, disc.musicStyle, disc.availableQuantity, disc.unitaryValue)
         self.database.query(query)
         self.database.commit()
-        return disc # json.dumps(disc.__dict__)
+        return disc
 
-    def update_disc_decrement_quantity(self, artist, discName):
-        query = "UPDATE disc SET availableQuantity = availableQuantity - 1 WHERE artist = '{}' AND discName = '{}'".format(
-            artist, discName)
+    def update_disc_quantity(self, artist, discName, quantityPurchased):
+        query = "UPDATE disc SET availableQuantity = availableQuantity - {} WHERE artist = '{}' AND discName = '{}'".format(
+            quantityPurchased, artist, discName)
         self.database.query(query)
         self.database.commit()
         if self.database.cur.rowcount == 0:
