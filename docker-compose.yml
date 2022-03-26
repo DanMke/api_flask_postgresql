@@ -11,12 +11,12 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-learecordshop}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-      - POSTGRES_DB=${POSTGRES_DB:-learecordshop}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
     ports:
       - '5432:5432'
-    volumes: 
+    # volumes: 
       # - ./db/data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      # - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
     networks:
       - network-lea-record-shop
 
@@ -31,8 +31,8 @@ services:
     depends_on:
       - postgresql-db
     environment:
-      - POSTGRESQL_ADDRESS=postgresql-db
-      - POSTGRESQL_DATABASE=learecordshop
+      - POSTGRESQL_ADDRESS=database-lea-records-shop.cwjtf9nssntx.us-east-2.rds.amazonaws.com
+      - POSTGRESQL_DATABASE=postgres
       - POSTGRESQL_USERNAME=learecordshop
       - POSTGRESQL_PASSWORD=password
 
