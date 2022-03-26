@@ -49,6 +49,6 @@ class DiscController:
             if self.disc_service.get_disc_by_artist_and_name(request.json['artist'], request.json['discName']):
                 return jsonify({'message': 'Disc already exists'}), 409
 
-            disc = Disc(request.json['discName'], request.json['artist'], request.json['releaseYear'], request.json['musicStyle'], request.json['unitaryValue'], request.json['availableQuantity'])
+            disc = Disc(request.json['discName'], request.json['artist'], request.json['releaseYear'], request.json['musicStyle'], request.json['availableQuantity'], request.json['unitaryValue'])
             self.disc_service.create_disc(disc)
             return json.dumps(disc.__dict__), 201
