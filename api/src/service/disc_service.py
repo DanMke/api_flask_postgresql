@@ -11,7 +11,7 @@ class DiscService:
             query += " WHERE "
             for key, value in args_dict.items():
                 if key == 'artist' or key == 'discName' or key == 'musicStyle':
-                    query += "LOWER(artist) = LOWER('{}') AND ".format(value)
+                    query += "LOWER({}) = LOWER('{}') AND ".format(key, value)
                 else:
                     query += "{} = '{}' AND ".format(key, value)
             query = query[:-4]
