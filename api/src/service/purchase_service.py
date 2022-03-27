@@ -18,7 +18,7 @@ class PurchaseService:
                 elif key == 'endDateTime':
                     query += "purchaseDateTime <= '{}' AND ".format(value)
                 elif key == 'email':
-                    query += "email = '{}' AND ".format(value)
+                    query += "LOWER(email) = LOWER('{}') AND ".format(value)
             query = query[:-4]
 
         self.database.query(query)

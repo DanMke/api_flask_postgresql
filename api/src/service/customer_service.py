@@ -5,7 +5,7 @@ class CustomerService:
         self.database = database
 
     def get_customer_by_email(self, email):
-        query = "SELECT email, fullName, phone, cpf, birthDate, active FROM customer WHERE email = '{}'".format(email)
+        query = "SELECT email, fullName, phone, cpf, birthDate, active FROM customer WHERE LOWER(email) = LOWER('{}')".format(email)
         self.database.query(query)
         row = self.database.cur.fetchone()
         if row is None:
@@ -38,7 +38,7 @@ class CustomerService:
         return customer
 
     def inactivate_customer(self, customer_email):
-        query = "UPDATE customer SET active = false WHERE email = '{}'".format(
+        query = "UPDATE customer SET active = false WHERE LOWER(email) = LOWER('{}')".format(
             customer_email)
         self.database.query(query)
         self.database.commit()
@@ -47,7 +47,7 @@ class CustomerService:
         return self.get_customer_by_email(customer_email)
 
     def activate_customer(self, customer_email):
-        query = "UPDATE customer SET active = true WHERE email = '{}'".format(
+        query = "UPDATE customer SET active = true WHERE LOWER(email) = LOWER('{}')".format(
             customer_email)
         self.database.query(query)
         self.database.commit()

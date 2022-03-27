@@ -54,12 +54,12 @@ class PurchaseController:
             for disc in request.json['discs']:
                 disc_db = self.disc_service.get_disc_by_artist_and_name(disc['artist'], disc['discName'])
 
+                if disc_db is None:
+                    return jsonify({'message': 'Disc {} by {} not found'.format(disc['discName'], disc['artist'])}), 400
+
                 total_value += disc_db.unitaryValue * disc['quantity']
                 self.purchase_service.update_purchase_add_disc(purchaseId, disc['discName'], disc['artist'], disc['quantity'])
                 discs.append(disc)
-
-                if disc_db is None:
-                    return jsonify({'message': 'Disc {} by {} not found'.format(disc['discName'], disc['artist'])}), 400
 
                 if disc_db.availableQuantity < disc['quantity']:
                     return jsonify({'message': 'Disc {} by {} not available'.format(disc['discName'], disc['artist'])}), 400

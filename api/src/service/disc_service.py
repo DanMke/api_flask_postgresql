@@ -10,7 +10,7 @@ class DiscService:
         if len(args_dict) > 0:
             query += " WHERE "
             for key, value in args_dict.items():
-                query += "{} = '{}' AND ".format(key, value)
+                query += "LOWER({}) = LOWER('{}') AND ".format(key, value)
             query = query[:-4]
         self.database.query(query)
         rows = self.database.cur.fetchall()
@@ -23,7 +23,7 @@ class DiscService:
         return discs
 
     def get_discs_by_artist(self, artist):
-        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc WHERE artist = '{}'".format(artist)
+        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc WHERE LOWER(artist) = LOWER('{}')".format(artist)
         self.database.query(query)
         rows = self.database.cur.fetchall()
         if rows is None:
@@ -35,7 +35,7 @@ class DiscService:
         return discs
 
     def get_disc_by_artist_and_name(self, artist, discName):
-        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc WHERE artist = '{}' AND discName = '{}'".format(
+        query = "SELECT discName, artist, releaseYear, musicStyle, availableQuantity, unitaryValue FROM disc WHERE LOWER(artist) = LOWER('{}') AND LOWER(discName) = LOWER('{}')".format(
             artist, discName)
         self.database.query(query)
         row = self.database.cur.fetchone()
@@ -52,7 +52,7 @@ class DiscService:
         return disc
 
     def update_disc_quantity(self, artist, discName, quantityPurchased):
-        query = "UPDATE disc SET availableQuantity = availableQuantity - {} WHERE artist = '{}' AND discName = '{}'".format(
+        query = "UPDATE disc SET availableQuantity = availableQuantity - {} WHERE LOWER(artist) = LOWER('{}') AND LOWER(discName) = LOWER('{}')".format(
             quantityPurchased, artist, discName)
         self.database.query(query)
         self.database.commit()
