@@ -10,7 +10,10 @@ class DiscService:
         if len(args_dict) > 0:
             query += " WHERE "
             for key, value in args_dict.items():
-                query += "LOWER({}) = LOWER('{}') AND ".format(key, value)
+                if key == 'artist' or key == 'discName' or key == 'musicStyle':
+                    query += "LOWER(artist) = LOWER('{}') AND ".format(value)
+                else:
+                    query += "{} = '{}' AND ".format(key, value)
             query = query[:-4]
         self.database.query(query)
         rows = self.database.cur.fetchall()
