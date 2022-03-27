@@ -9,6 +9,10 @@ class CustomerController:
         self.routes()
 
     def routes(self):
+        @self.app.route('/', methods=['GET'])
+        def index():
+            return jsonify({'message': 'Welcome to Lea Record Shop!'}), 200
+
         @self.app.route('/customers', methods=['GET'])
         def get_customers():
             customers = self.customer_service.get_customers()
