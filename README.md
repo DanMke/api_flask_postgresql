@@ -63,6 +63,8 @@ Disponível em: ```http://23.21.16.151:8080```
 * Utilização do Docker Swarm para escalar o deploy na máquina virtual.
 
 * Criar cancelamento de compra.
+* Criar atualização dos dados do disco.
+* Criar deleção de disco.
 
 * Com objetivo de evitar o problema de acesso simultâneo ao banco de dados, com o dado crítico que seria a quantidade de discos em estoque, foi pensado em criar um job para criação e manutenção de uma fila de requisições de compra, porém gostaria de fazer um teste de estresse na API e melhor analisar esta situação.
 
