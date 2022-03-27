@@ -1,0 +1,17 @@
+{
+    "dev": {
+        "app_function": "app.app",
+        "profile_name": "default",
+        "project_name": "api",
+        "runtime": "python3.6",
+        "s3_bucket": "zappa-uqemm98dr",
+        "aws_region": "us-east-1",
+        "role_arn": "arn:aws:iam::093865257896:role/*-ZappaLambdaExecutionRole",
+        "environment_variables": {
+            "POSTGRESQL_ADDRESS": "database-lea-records-shop.cwjtf9nssntx.us-east-2.rds.amazonaws.com",
+            "POSTGRESQL_DATABASE": "postgres",
+            "POSTGRESQL_USERNAME": "learecordshop",
+            "POSTGRESQL_PASSWORD": "password"
+        }
+    }
+}
